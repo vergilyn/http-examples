@@ -30,7 +30,7 @@ public class HttpCloseTest extends AbstractHttpClientTestng {
     public void releasedConn(){
         HttpGet method = null;
         try {
-            method = new HttpGet("http://www.baidu.com");
+            method = new HttpGet(ROUTE_BAIDU);
             HttpResponse response = httpClient.execute(method);
 
             // 内部会调用: entity.getContent().close();

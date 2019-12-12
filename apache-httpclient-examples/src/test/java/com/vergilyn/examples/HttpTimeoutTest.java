@@ -2,6 +2,7 @@ package com.vergilyn.examples;
 
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
@@ -11,10 +12,8 @@ import org.testng.annotations.Test;
 /**
  * @date 2019/2/20
  */
+@Slf4j
 public class HttpTimeoutTest extends AbstractHttpClientTestng {
-    private static final String BAIDU_URL = "http://www.baidu.com";
-    private static final String QQ_URL = "http://www.qq.com";
-
     @Override
     protected AbstractHttpClientTestng.HttpClientConfig getConfig() {
         return new AbstractHttpClientTestng.HttpClientConfig(10000, 5000, 1000, 10, 10);
@@ -22,7 +21,7 @@ public class HttpTimeoutTest extends AbstractHttpClientTestng {
 
     @Test(invocationCount = 20, threadPoolSize = 5)
     public void timeout() {
-        requestCache(BAIDU_URL);
+        requestCache(ROUTE_BAIDU);
     }
 
     public long requestCache(String url){
@@ -50,7 +49,7 @@ public class HttpTimeoutTest extends AbstractHttpClientTestng {
             System.out.println("request >>>> " + url + " >>>> " + (System.currentTimeMillis() - time));
             return System.currentTimeMillis() - time;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return -1L;
     }

@@ -14,12 +14,14 @@ import java.io.IOException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
+@Slf4j
 public abstract class AbstractHttpClientTestng {
     protected HttpClientConfig getConfig(){
         return new HttpClientConfig(-1, -1, -1, 2, 5);

@@ -2,6 +2,7 @@ package com.vergilyn.examples;
 
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,6 +17,7 @@ import org.testng.annotations.Test;
  *   response、method的区别：正常情况下都是一样的，调用的是ConnectionHolder#
  * </p>
  */
+@Slf4j
 public class HttpMethodCloseTest extends AbstractHttpClientTestng {
     @Override
     protected HttpClientConfig getConfig() {
@@ -32,7 +34,7 @@ public class HttpMethodCloseTest extends AbstractHttpClientTestng {
             response = httpClient.execute(method);
             // ...
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -48,7 +50,7 @@ public class HttpMethodCloseTest extends AbstractHttpClientTestng {
         try {
             response.getEntity().getContent().close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -64,7 +66,7 @@ public class HttpMethodCloseTest extends AbstractHttpClientTestng {
         try {
             ((CloseableHttpResponse) response).close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -93,7 +95,7 @@ public class HttpMethodCloseTest extends AbstractHttpClientTestng {
         try {
             httpClient.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 }

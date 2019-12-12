@@ -2,6 +2,7 @@ package com.vergilyn.examples;
 
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.testng.annotations.Test;
@@ -24,6 +25,7 @@ import org.testng.annotations.Test;
  * </pre>
  * @date 2019/2/22
  */
+@Slf4j
 public class HttpRouteTest extends AbstractHttpClientTestng {
 
     @Override
@@ -50,7 +52,7 @@ public class HttpRouteTest extends AbstractHttpClientTestng {
             CloseableHttpResponse response = httpClient.execute(httpGet);
             System.out.println("request >>>> " + url + " >>>> " + response.getHeaders("Connection")[0].getValue());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             httpGet.releaseConnection();
         }
