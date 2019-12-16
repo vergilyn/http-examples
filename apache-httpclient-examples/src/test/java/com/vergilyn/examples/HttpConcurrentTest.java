@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -18,6 +19,7 @@ import org.testng.collections.Lists;
  * @author VergiLyn
  * @date 2019-08-01
  */
+@Slf4j
 public class HttpConcurrentTest extends AbstractHttpClientTestng {
 
     @Test(dataProvider = "data", threadPoolSize = 10, invocationCount = 3)
@@ -34,7 +36,7 @@ public class HttpConcurrentTest extends AbstractHttpClientTestng {
             CloseableHttpResponse execute = httpClient.execute(post);
             System.out.println(EntityUtils.toString(execute.getEntity()));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

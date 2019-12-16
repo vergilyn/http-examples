@@ -33,7 +33,7 @@ public class HttpTimeoutTest extends AbstractHttpClientTestng {
             System.out.println("request-cache >>>> " + url + " >>>> " + (System.currentTimeMillis() - time));
             return System.currentTimeMillis() - time;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             httpGet.releaseConnection();
         }

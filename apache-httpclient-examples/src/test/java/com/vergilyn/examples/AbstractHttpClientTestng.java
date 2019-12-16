@@ -60,7 +60,7 @@ public abstract class AbstractHttpClientTestng {
         try {
             httpClient.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

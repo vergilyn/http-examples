@@ -7,7 +7,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.execchain.MainClientExec;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -18,7 +17,7 @@ import org.testng.annotations.Test;
  * </p>
  */
 @Slf4j
-public class HttpMethodCloseTest extends AbstractHttpClientTestng {
+public class ValidHttpMethodCloseTest extends AbstractHttpClientTestng {
     @Override
     protected HttpClientConfig getConfig() {
         return new HttpClientConfig(-1, -1, -1, 2, 2);
@@ -73,17 +72,13 @@ public class HttpMethodCloseTest extends AbstractHttpClientTestng {
     /**
      * connection关闭不可复用，但conn-pool未shutdown。
      * <ol>
-     *   <li>ConnectionHolder#cancel()</li>
-     *   <li>ConnectionHolder#abortConnection(): 终止连接</li>
+     *   <li>AbstractExecutionAwareRequest#reset()</li>
+     *   <li>ConnectionHolder#abortConnection()</li>
      * </ol>
-     *
-     * <p>
-     *   备注：{@linkplain MainClientExec#execute(org.apache.http.conn.routing.HttpRoute, org.apache.http.client.methods.HttpRequestWrapper, org.apache.http.client.protocol.HttpClientContext, org.apache.http.client.methods.HttpExecutionAware) MainClientExec#execute()}
-     * 可知Cancellable可能是ConnectionHolder，在异常情况下还可能是ConnectionRequest
-     * </p>
      */
     @Test(singleThreaded = true, invocationCount = 2)
     public void releaseConnection() {
+        // 等价于  method.reset();
         method.releaseConnection();
     }
 

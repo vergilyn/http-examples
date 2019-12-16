@@ -3,6 +3,7 @@ package com.vergilyn.examples;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -16,6 +17,7 @@ import org.testng.annotations.Test;
  *   3. HttpClient.close() == connManager.shutdown()，系统关闭时需要。会立即断开当前正在执行数据传输的连接或可复用的连接，且连接池不可再使用。
  * </p>
  */
+@Slf4j
 public class HttpCloseTest extends AbstractHttpClientTestng {
 
     @Override
@@ -42,14 +44,14 @@ public class HttpCloseTest extends AbstractHttpClientTestng {
             System.out.println("responseBody >>>> " + body);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
 
         }finally{
             method.releaseConnection(); // 把当前连接交还给conn-manager
             try {
                 httpClient.close(); // Connection pool shut down!
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
     }

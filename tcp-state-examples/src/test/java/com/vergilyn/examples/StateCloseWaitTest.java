@@ -9,12 +9,8 @@ import java.nio.charset.StandardCharsets;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 /**
@@ -22,9 +18,7 @@ import org.testng.annotations.Test;
  * @date 2019-12-12
  */
 @Slf4j
-public class StateCloseWaitTest {
-    private HttpClient httpClient;
-    private long beginTimestamp;
+public class StateCloseWaitTest extends AbstractTestng {
 
     @Test
     public void httpClient() {
@@ -34,7 +28,7 @@ public class StateCloseWaitTest {
 
             System.out.println(EntityUtils.toString(data.getEntity()));
 
-            // Thread.sleep(20000);
+            Thread.sleep(20000);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -71,18 +65,4 @@ public class StateCloseWaitTest {
         }
     }
 
-    @BeforeTest
-    public void before() {
-        beginTimestamp = System.currentTimeMillis();
-        httpClient = HttpClients.custom()
-                .setMaxConnPerRoute(20)
-                .setMaxConnTotal(40)
-                .build();
-        log.info(">>>> invoke begin! <<<<");
-    }
-
-    @AfterTest
-    public void after(){
-        log.info(">>>> invoke finish, exec: {} ms <<<<", System.currentTimeMillis() - beginTimestamp);
-    }
 }
