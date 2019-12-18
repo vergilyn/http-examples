@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
  *   2. HttpGet.close()需要，并不会真正的关闭连接，而是交还给连接池。
  *   3. HttpClient.close() == connManager.shutdown()，系统关闭时需要。会立即断开当前正在执行数据传输的连接或可复用的连接，且连接池不可再使用。
  * </p>
+ * TODO 2019-12-18 `1) 2)`需要重新确定，主要是`InputStream`在被read后发现有新的情形！！！
  */
 @Slf4j
 public class HttpCloseTest extends AbstractHttpClientTestng {
@@ -30,16 +31,17 @@ public class HttpCloseTest extends AbstractHttpClientTestng {
      */
     @Test(invocationCount = 1, threadPoolSize = 5)
     public void releasedConn(){
-        HttpGet method = null;
+        HttpGet httpGet = null;
+        HttpResponse httpResponse = null;
         try {
-            method = new HttpGet(ROUTE_BAIDU);
-            HttpResponse response = httpClient.execute(method);
+            httpGet = new HttpGet(ROUTE_BAIDU);
+            httpResponse = httpClient.execute(httpGet);
 
             // 内部会调用: entity.getContent().close();
-            // EntityUtils.toString(response.getEntity(), Charset.defaultCharset());
+            // EntityUtils.toString(response.getEntity());
 
-            // 未调用 entity.getContent().close()，所以需要自己关闭。
-            String body = IOUtils.toString(response.getEntity().getContent(), StandardCharsets.UTF_8);
+            // 未调用 entity.getContent().close()，所以需要自己关闭。 TODO 2019-12-18 待重新确定
+            String body = IOUtils.toString(httpResponse.getEntity().getContent(), StandardCharsets.UTF_8);
 
             System.out.println("responseBody >>>> " + body);
 
@@ -47,7 +49,7 @@ public class HttpCloseTest extends AbstractHttpClientTestng {
             log.error(e.getMessage(), e);
 
         }finally{
-            method.releaseConnection(); // 把当前连接交还给conn-manager
+            httpGet.releaseConnection(); // 把当前连接交还给conn-manager
             try {
                 httpClient.close(); // Connection pool shut down!
             } catch (IOException e) {

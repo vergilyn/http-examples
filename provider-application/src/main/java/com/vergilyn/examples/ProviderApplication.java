@@ -18,7 +18,7 @@ public class ProviderApplication {
         Properties properties = new Properties();
         properties.setProperty("spring.application.name", "provider-application");
         properties.setProperty("server.port", ProviderURLBuilder.APPLICATION_PORT + "");
-        properties.setProperty("server.tomcat.connection-timeout", "10s");
+        properties.setProperty("server.tomcat.connection-timeout", "1d");
 
         application.setDefaultProperties(properties);
 

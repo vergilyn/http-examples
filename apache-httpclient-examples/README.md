@@ -48,16 +48,54 @@ public class HttpCloseTest extends AbstractHttpClientTestng {
 | method.releaseConnection()                  | close                    | running             | BHttpConnectionBase#shutdown();       |
 | httpClient.close()                          | close                    | shutdown            | BHttpConnectionBase#close(); 如果其余connect还在工作中，会强制终止（不会等connect工作完成）       |
 
+**<font color="red">2019-12-18 更正：以上总结表格有误，待重新梳理！！！</font>**
+```JAVA
+/* `InputStream -> (data.getEntity().getContent())`被read后，如下代码中的`IOUtils.toString(...) / EntityUtils.toString(...)`
+ * 不管是， `data.getEntity().getContent().close()` 亦或 `httpGet.releaseConnection()`，都未close-connection。
+ * 原因是，其执行`org.apache.http.impl.execchain.ConnectionHolder.abortConnection()` 时 `released = true`
+ * （并且，pool.available = 1, pool.leased = 0 说明该connection已可复用）
+ * 
+ * 但是，如果是不read InputStream，
+ * 1. `httpGet.releaseConnection()`会调用`managedConn.shutdown() <=> socket.close()`，所以connection无法复用
+ * 2. `httpResponse.getEntity().getContent().close()` 最终调用`ConnectionHolder#releaseConnection(true)`指明connection允许复用
+ */
+public class Test{
+    
+    public void httpClient() {
+        HttpGet httpGet = null;
+        try {
+            httpGet = new HttpGet(ProviderURLBuilder.urlHello());
+            HttpResponse data = httpClient.execute(httpGet);
+    
+            System.out.println(IOUtils.toString(data.getEntity().getContent(), ContentType.get(data.getEntity()).getCharset()));
+            // System.out.println(EntityUtils.toString(data.getEntity()));
+            // data.getEntity().getContent().close();
+    
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            httpGet.releaseConnection();
+        }
+    }
+}
+
+```
+
+
+
 `BHttpConnectionBase` 中 `close()` 与 `shutdown()` 的区别（不一定正确的理解）：
 1. `close()`相对温柔，会等到手上的事情做完再`socket.close()`。（不一定指 connect的全部数据包交互完毕） 
 
-总结，业务代码中应该是调用`response.getEntity().getContent().close()`！
+总结，**业务代码**中应该更多的是调用`response.getEntity().getContent().close()`！
+
+备注: 
+1. `org.apache.http.util.EntityUtils.toString(execute.getEntity())` 内部最终会调用 `HttpEntity.getContent().close()`，所以可以不用手动再次调用。
 
 ### 2.1 `((CloseableHttpResponse) response).close()` 与 `response.getEntity().getContent().close()`
 
 1. `((CloseableHttpResponse) response).close()` 关闭连接，且连接不可复用。
 
-![http-response-close调用流程图](../docs/images/http-response-close-activity.png)
+![http-response-close 调用流程图](../docs/images/http-response-close-activity.png)
 
 ```JAVA
 package org.apache.http.impl.execchain;

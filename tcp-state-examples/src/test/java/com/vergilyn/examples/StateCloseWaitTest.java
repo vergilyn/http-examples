@@ -22,11 +22,13 @@ public class StateCloseWaitTest extends AbstractTestng {
 
     @Test
     public void httpClient() {
+        HttpGet httpGet = null;
+        HttpResponse httpResponse = null;
         try {
-            HttpGet httpGet = new HttpGet(ProviderURLBuilder.urlHello());
-            HttpResponse data = httpClient.execute(httpGet);
+            httpGet = new HttpGet(ProviderURLBuilder.urlHello());
+            httpResponse = httpClient.execute(httpGet);
 
-            System.out.println(EntityUtils.toString(data.getEntity()));
+            System.out.println(EntityUtils.toString(httpResponse.getEntity()));
 
             Thread.sleep(20000);
         } catch (Exception e) {
