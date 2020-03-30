@@ -1,5 +1,7 @@
 package com.vergilyn.examples.controller;
 
+import com.google.common.base.Strings;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +27,8 @@ public class ProviderController {
             }
         }
 
-        return String.format("hello, exec: %s ms", System.currentTimeMillis() - begin);
+        String placeholder = Strings.repeat("0", 1_0000);
+
+        return String.format("%s hello, exec: %s ms", placeholder, System.currentTimeMillis() - begin);
     }
 }

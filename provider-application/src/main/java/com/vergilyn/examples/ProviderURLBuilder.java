@@ -10,7 +10,7 @@ public class ProviderURLBuilder {
     private static final String URL_HELLO = BASE_URL + "/provider/hello";
 
     public static String urlHello(){
-        return urlHello(0L);
+        return URL_HELLO;
     }
 
     public static String urlHello(long ms){

@@ -1,10 +1,12 @@
 package com.vergilyn.examples;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.testng.annotations.Test;
@@ -58,4 +60,8 @@ public class HttpCloseTest extends AbstractHttpClientTestng {
         }
     }
 
+    public static void main(String[] args) throws URISyntaxException {
+        String str = StringUtils.substring(null, 0, 4);
+        System.out.println(str);
+    }
 }

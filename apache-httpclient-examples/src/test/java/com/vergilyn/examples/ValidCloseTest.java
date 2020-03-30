@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
  * </p>
  */
 @Slf4j
-public class ValidHttpMethodCloseTest extends AbstractHttpClientTestng {
+public class ValidCloseTest extends AbstractHttpClientTestng {
     @Override
     protected HttpClientConfig getConfig() {
         return new HttpClientConfig(-1, -1, -1, 2, 2);
@@ -63,7 +63,7 @@ public class ValidHttpMethodCloseTest extends AbstractHttpClientTestng {
     @Test(singleThreaded = true, invocationCount = 2)
     public void closeResponse() {
         try {
-            ((CloseableHttpResponse) response).close();
+            ((CloseableHttpResponse)response).close();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
@@ -92,5 +92,11 @@ public class ValidHttpMethodCloseTest extends AbstractHttpClientTestng {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println();
+
     }
 }

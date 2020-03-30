@@ -10,6 +10,7 @@ package com.vergilyn.examples;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,12 +41,14 @@ public abstract class AbstractHttpClientTestng {
                 .setConnectionRequestTimeout(config.connRequestTimeout)
                 .setConnectTimeout(config.connTimeout)
                 .setSocketTimeout(config.socketTimeout)
+                .setMaxRedirects(0)
                 .build();
 
         httpClient = HttpClients.custom()
                 .setDefaultRequestConfig(requestConfig)
                 .setMaxConnPerRoute(config.maxConnPerRoute)
                 .setMaxConnTotal(config.maxConnTotal)
+                .setConnectionTimeToLive(10086, TimeUnit.SECONDS)
 
                 //  可以看到在HttpClientBuilder进行build的时候，如果指定了开启清理功能，会创建一个连接池清理线程并运行它。
                 // .evictIdleConnections(maxIdleTime, unit)     // 指定是否清理空闲连接
