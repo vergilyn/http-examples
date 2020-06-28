@@ -36,7 +36,7 @@
         <google-guava.version>24.1-jre</google-guava.version>
         <projectlombok.version>1.18.4</projectlombok.version>
         <alibaba-fastjson.version>1.2.54</alibaba-fastjson.version>
-        <apache-common-lang3.version>3.5</apache-common-lang3.version>
+        <apache-common-lang3.version>3.10</apache-common-lang3.version>
         <apache-common-io.version>2.6</apache-common-io.version>
         <apache-httpclient.version>4.5.10</apache-httpclient.version>
         <testng.version>6.14.2</testng.version>
