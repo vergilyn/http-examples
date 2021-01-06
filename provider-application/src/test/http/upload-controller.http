@@ -1,0 +1,17 @@
+POST http://127.0.0.1:19010/upload/file-form
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition:  form-data; name="file"; filename="local_file.txt"
+
+< local_file.txt
+--WebAppBoundary
+Content-Disposition:  form-data; name="filename"
+
+param_filename.txt
+
+--WebAppBoundary
+Content-Disposition:  form-data; name="number"
+
+1024
+

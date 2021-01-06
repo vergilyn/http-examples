@@ -17,8 +17,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
@@ -56,6 +58,10 @@ public abstract class AbstractHttpClientTestng {
 
                 .build();
 
+    }
+
+    protected void printResponse(CloseableHttpResponse response) throws IOException {
+        System.out.println(EntityUtils.toString(response.getEntity()));
     }
 
     @AfterTest

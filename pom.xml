@@ -32,13 +32,15 @@
         <java.version>1.8</java.version>
 
         <spring-boot-dependencies.version>2.2.2.RELEASE</spring-boot-dependencies.version>
+        <apache-httpclient.version>4.5.13</apache-httpclient.version>
+        <apache-httpmime.version>4.5.13</apache-httpmime.version>
 
         <google-guava.version>24.1-jre</google-guava.version>
         <projectlombok.version>1.18.4</projectlombok.version>
         <alibaba-fastjson.version>1.2.54</alibaba-fastjson.version>
         <apache-common-lang3.version>3.10</apache-common-lang3.version>
         <apache-common-io.version>2.6</apache-common-io.version>
-        <apache-httpclient.version>4.5.10</apache-httpclient.version>
+
         <testng.version>6.14.2</testng.version>
     </properties>
 
@@ -63,6 +65,12 @@
                 <artifactId>httpclient</artifactId>
                 <version>${apache-httpclient.version}</version>
             </dependency>
+            <!-- 扩展httpclient上传 -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${apache-httpmime.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -72,7 +80,6 @@
             <artifactId>provider-application</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.testng</groupId>

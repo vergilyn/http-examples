@@ -1,7 +1,7 @@
 package com.vergilyn.examples;
 
 /**
- * @author VergiLyn
+ * @author vergilyn
  * @date 2019-12-12
  */
 public class ProviderURLBuilder {
@@ -15,6 +15,8 @@ public class ProviderURLBuilder {
     private static final String URL_SERVER_CONTENT_TYPE = URL_HOST + "/content-type";
     private static final String URL_MODIFY_BY_RESPONSE_SET_HEADER = URL_SERVER_CONTENT_TYPE + "/modify-by-response-set-header";
     private static final String URL_MODIFY_BY_REQUEST_MAPPING_PRODUCES = URL_SERVER_CONTENT_TYPE + "/modify-by-request-mapping-produces";
+
+    public static final String URL_UPLOAD_FILE_FORM = URL_HOST + "/upload/file-form";
 
     public static String urlHello(){
         return URL_HELLO;
