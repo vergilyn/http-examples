@@ -1,16 +1,19 @@
 package com.vergilyn.examples.upload;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import com.vergilyn.examples.AbstractHttpClientTestng;
 import com.vergilyn.examples.ProviderURLBuilder;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.springframework.util.ResourceUtils;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 /**
@@ -21,25 +24,38 @@ import org.testng.annotations.Test;
  */
 public class HttpMimeUploadTest extends AbstractHttpClientTestng {
 
-	@Test
-	public void testPostFileForm() throws IOException {
-		String url = ProviderURLBuilder.URL_UPLOAD_FILE_FORM;
+	private static final String _FILED_FILE = "file";
+	private final MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create()
+													.addTextBody("filename", "param_filename")
+													.addTextBody("number", "1024");
 
+	@Test(description = "success")
+	public void addFile() throws FileNotFoundException {
+		File file = ResourceUtils.getFile("classpath:local_file.txt");
+		entityBuilder.addBinaryBody(_FILED_FILE, file);
+	}
+
+	@Test(description = "success")
+	public void add(){
+		String str = "string-content";
+		// entityBuilder.addBinaryBody(_FILED_FILE, str.getBytes(StandardCharsets.UTF_8));  // error
+		// avoid create temp-file
+		entityBuilder.addBinaryBody(_FILED_FILE, str.getBytes(StandardCharsets.UTF_8), ContentType.DEFAULT_BINARY, "");
+	}
+
+	@AfterTest
+	public void request() {
+		String url = ProviderURLBuilder.URL_UPLOAD_FILE_FORM;
 		HttpPost post = new HttpPost(url);
 
-		File file = ResourceUtils.getFile("classpath:local_file.txt");
+		post.setEntity(entityBuilder.build());
 
-		HttpEntity reqEntity = MultipartEntityBuilder.create()
-					.addBinaryBody("file", file)
-					// .addBinaryBody(String name, InputStream stream)
-					// .addBinaryBody(String name, byte[] b)
-					.addTextBody("filename", "param_filename")
-					.addTextBody("number", "1024")
-					.build();
-
-		post.setEntity(reqEntity);
-
-		CloseableHttpResponse response = httpClient.execute(post);
-		printResponse(response);
+		CloseableHttpResponse response = null;
+		try {
+			response = httpClient.execute(post);
+			printResponse(response);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

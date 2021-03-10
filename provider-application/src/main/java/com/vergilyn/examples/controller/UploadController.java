@@ -24,13 +24,14 @@ public class UploadController {
 	public String fileForm(MultipartFile file, String filename, Integer number){
 
 		Map<String, Object> rs = Maps.newHashMap();
-		rs.put("content-type", file.getContentType());
 		rs.put("filename", filename);
 		rs.put("number", number);
 
 		try(InputStream inputStream = file.getInputStream()) {
+			rs.put("content-type", file.getContentType());
 			rs.put("file-content", IOUtils.toString(inputStream, StandardCharsets.UTF_8));
 		}catch (Exception e){
+			rs.put("file-content", "error");
 			e.printStackTrace();
 		}
 
